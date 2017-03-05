@@ -100,9 +100,20 @@ static inline zend_bool pthreads_store_coerce(HashTable *table, zval *key, zval 
 		ZVAL_LONG(member, zend_hash_next_free_element(table));
 		return 0;
 	}
+	zend_string *str = Z_STR_P(key);
 
+	zval tmp;
+		
+		
 	switch (Z_TYPE_P(key)) {
 		case IS_STRING:
+		
+			ZVAL_LONG(&tmp, ZEND_STRTOL(ZSTR_VAL(str), NULL, 10));
+		
+			if(!zend_hash_exists(table, str) && zend_hash_index_exists(table, Z_LVAL(tmp))) {
+				ZVAL_ZVAL(member, &tmp, 0, 0);
+				return 1;
+			}
 		case IS_LONG:
 			ZVAL_ZVAL(member, key, 0, 0);
 			return 0;
@@ -151,7 +162,7 @@ int pthreads_store_delete(zval *object, zval *key) {
 
 	if (pthreads_monitor_lock(threaded->monitor)) {
 		if (!pthreads_store_is_immutable(object, &member)) {
-			if (Z_TYPE_P(key) == IS_LONG) {
+			if (Z_TYPE_P(&member) == IS_LONG) {
 				result = zend_hash_index_del(threaded->store.props, Z_LVAL(member));
 			} else result = zend_hash_del(threaded->store.props, Z_STR(member));
 		}
@@ -638,6 +649,7 @@ static pthreads_storage* pthreads_store_create(zval *unstore, zend_bool complex)
 			}
 
 		/* break intentionally omitted */
+		case IS_CONSTANT_AST:
 		case IS_ARRAY: if (pthreads_store_tostring(unstore, (char**) &storage->data, &storage->length, complex)==SUCCESS) {
 			if (Z_TYPE_P(unstore) == IS_ARRAY)
 				storage->exists = zend_hash_num_elements(Z_ARRVAL_P(unstore));
