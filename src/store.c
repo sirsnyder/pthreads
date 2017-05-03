@@ -663,12 +663,12 @@ static pthreads_storage* pthreads_store_create(zval *unstore, zend_bool complex)
                                 storage->origin = threaded->origin;
 				break;
 			}
-
+/*
 			if (!complex) {
 				storage->type = IS_NULL;
 				break;
 			}
-
+*/
 		/* break intentionally omitted */
 		case IS_ARRAY: if (pthreads_store_tostring(unstore, (char**) &storage->data, &storage->length, complex)==SUCCESS) {
 			if (Z_TYPE_P(unstore) == IS_ARRAY)
@@ -817,11 +817,12 @@ static int pthreads_store_tostring(zval *pzval, char **pstring, size_t *slength,
 	int result = FAILURE;
 	if (pzval && (Z_TYPE_P(pzval) != IS_NULL)) {
 		smart_str smart;
+/*
 		HashTable *tmp = NULL;
 		zval ztmp;
-
+*/
 		memset(&smart, 0, sizeof(smart_str));
-
+/*
 		if (Z_TYPE_P(pzval) == IS_ARRAY && !complex) {
 			tmp = zend_array_dup(Z_ARRVAL_P(pzval));
 
@@ -830,7 +831,7 @@ static int pthreads_store_tostring(zval *pzval, char **pstring, size_t *slength,
 			
 			zend_hash_apply(tmp, pthreads_store_remove_complex);
 		}
-
+*/
 		if ((Z_TYPE_P(pzval) != IS_OBJECT) ||
 			(Z_OBJCE_P(pzval)->serialize != zend_class_serialize_deny)) {
 			php_serialize_data_t vars;
@@ -841,21 +842,21 @@ static int pthreads_store_tostring(zval *pzval, char **pstring, size_t *slength,
 
 			if (EG(exception)) {
 				smart_str_free(&smart);
-
+/*
 				if (tmp) {
 					zval_dtor(&ztmp);
 				}
-
+*/
 				*pstring = NULL;
 				*slength = 0;
 				return FAILURE;			
 			}
 		}
-
+/*
 		if (tmp) {
 			zval_dtor(&ztmp);
 		}
-
+*/
 		if (smart.s) {
 			*slength = smart.s->len;
 			if (*slength) {
