@@ -15,6 +15,14 @@ class Test extends Thread {
 	public function __construct(Custom $custom) {
 		$this->custom = $custom;
 	}
+        
+        public function currentThreadId():int {
+            return Thread::getCurrentThreadId();
+        }
+
+        public function wrongReturnType():string {
+            return 1;
+        }
 
 	public function method() : Custom {
 		return (object) $this->custom;
@@ -22,6 +30,8 @@ class Test extends Thread {
 
 	public function run() {
 		var_dump($this->method());
+                $this->currentThreadId();
+                $this->wrongReturnType();
 	}
 }
 
