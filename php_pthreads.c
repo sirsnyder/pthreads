@@ -159,6 +159,7 @@ static inline zend_bool pthreads_verify_type(zend_execute_data *execute_data, zv
         
 	if (!var ||
 #if PHP_VERSION_ID >= 70200
+                Z_ISNULL_P(var) ||
                 !ZEND_TYPE_IS_CLASS(info->type) ||
 #else
 		!ZEND_SAME_FAKE_TYPE(info->type_hint, Z_TYPE_P(var)) ||
