@@ -16,12 +16,16 @@ class Test extends Thread {
 		$this->custom = $custom;
 	}
         
-        public function currentThreadId():int {
-            return Thread::getCurrentThreadId();
+        public function checkReturnType():int {
+            return 1;
         }
 
         public function wrongReturnType():string {
             return 1;
+        }
+        
+        public function checkOptionalNull():?Threaded {
+            return ($var = null);
         }
 
 	public function method() : Custom {
@@ -30,8 +34,9 @@ class Test extends Thread {
 
 	public function run() {
 		var_dump($this->method());
-                $this->currentThreadId();
+                $this->checkReturnType();
                 $this->wrongReturnType();
+                $this->checkOptionalNull();
 	}
 }
 
@@ -42,6 +47,9 @@ $test->start() && $test->join();
 --EXPECT--
 object(Custom)#1 (0) {
 }
+int(1)
+string(1) "1"
+NULL
 
 
 
