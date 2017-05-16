@@ -64,9 +64,29 @@ static void pthreads_build_delayed_properties(pthreads_object_t* thread, zend_cl
                                 sizeof(zval) * candidate->default_static_members_count);
 
                         for (i=0; i<prepared->default_static_members_count; i++) {
-                                pthreads_store_separate(
-                                        &candidate->default_static_members_table[i],
-                                        &prepared->default_static_members_table[i], 0);
+                                if(PTHREADS_ZG(threadlocal_static_properties)) {
+                                        switch (Z_TYPE(prepared->default_static_members_table[i])) {
+                                                case IS_REFERENCE: {
+                                                        pthreads_store_separate(
+                                                                &candidate->default_static_members_table[i],
+                                                                &prepared->default_static_members_table[i], 0);
+                                                } break;
+
+                                                case IS_STRING: {
+                                                        ZVAL_STR(
+                                                                &prepared->default_static_members_table[i], 
+                                                                zend_string_new(Z_STR(prepared->default_static_members_table[i])));
+                                                } break;
+
+                                                default: if (Z_REFCOUNTED(prepared->default_static_members_table[i])) {
+                                                        ZVAL_NULL(&prepared->default_static_members_table[i]);
+                                                } 
+                                        }
+                                } else {
+                                        pthreads_store_separate(
+                                                &candidate->default_static_members_table[i],
+                                                &prepared->default_static_members_table[i], 0);
+                                }
                         }	
                         prepared->static_members_table = prepared->default_static_members_table;
                 } else prepared->default_static_members_count = 0;
@@ -722,6 +742,8 @@ int pthreads_prepared_startup(pthreads_object_t* thread, pthreads_monitor_t *rea
 #endif
 
 		pthreads_prepare_sapi(thread);
+                
+                PTHREADS_ZG(threadlocal_static_properties) = thread->options & PTHREADS_LOCAL_STATICS ? 1 : 0;
 	
 		if (thread->options & PTHREADS_INHERIT_INI)
 			pthreads_prepare_ini(thread);
@@ -738,7 +760,7 @@ int pthreads_prepared_startup(pthreads_object_t* thread, pthreads_monitor_t *rea
 
 		if (thread->options & PTHREADS_INHERIT_INCLUDES)
 			pthreads_prepare_includes(thread);
-
+                
 		pthreads_prepare_exception_handler(thread);
 		pthreads_prepare_resource_destructor(thread);
 		pthreads_monitor_add(ready, PTHREADS_MONITOR_READY);
