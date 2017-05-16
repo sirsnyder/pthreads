@@ -1,7 +1,7 @@
 # Threading for PHP - Share Nothing, Do Everything :)
 
-[![Build Status](https://travis-ci.org/SirSnyder/pthreads.svg?branch=extended)](https://travis-ci.org/SirSnyder/pthreads)
-[![Build status](https://ci.appveyor.com/api/projects/status/github/SirSnyder/pthreads?branch=extended&svg=true)](https://ci.appveyor.com/project/SirSnyder/pthreads/branch/extended)
+[![Build Status](https://travis-ci.org/SirSnyder/pthreads.svg?branch=php/71)](https://travis-ci.org/SirSnyder/pthreads)
+[![Build status](https://ci.appveyor.com/api/projects/status/github/SirSnyder/pthreads?branch=php/71&svg=true)](https://ci.appveyor.com/project/SirSnyder/pthreads/branch/extended)
 [![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/SirSnyder/pthreads.svg)](http://isitmaintained.com/project/SirSnyder/pthreads "Average time to resolve an issue")
 [![Percentage of issues still open](http://isitmaintained.com/badge/open/SirSnyder/pthreads.svg)](http://isitmaintained.com/project/SirSnyder/pthreads "Percentage of issues still open")
 [![Join the chat at https://gitter.im/krakjoe/pthreads](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/krakjoe/pthreads?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
