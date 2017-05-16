@@ -91,7 +91,7 @@ static void pthreads_build_delayed_properties(pthreads_object_t* thread, zend_cl
                         prepared->static_members_table = prepared->default_static_members_table;
                 } else prepared->default_static_members_count = 0;
         }
-        
+
         {
                 zend_string *key;
                 zval *value;
@@ -105,6 +105,7 @@ static void pthreads_build_delayed_properties(pthreads_object_t* thread, zend_cl
                         }
 
                         switch (Z_TYPE_P(value)) {
+#if PHP_VERSION_ID >= 70100
                                 case IS_PTR: {
                                         zend_class_constant *zc = Z_PTR_P(value),	
                                                             rc;
@@ -124,7 +125,7 @@ static void pthreads_build_delayed_properties(pthreads_object_t* thread, zend_cl
                                         }
                                         continue;
                                 }
-
+#endif
                                 case IS_STRING:
                                 case IS_ARRAY:
                                 case IS_OBJECT: {
