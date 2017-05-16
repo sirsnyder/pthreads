@@ -52,9 +52,9 @@ define('PTHREADS_INHERIT_COMMENTS', 0x100000);
 define('PTHREADS_ALLOW_HEADERS', 0x1000000);
 
 /**
- * Allow global inheritance for new threads
+ * Static properties are thread local per thread
  */
-define('PTHREADS_ALLOW_GLOBALS', 0x10000000);
+define('PTHREADS_LOCAL_STATICS', 0x10000000);
 
 /**
  * Threaded class
