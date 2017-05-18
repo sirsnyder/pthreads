@@ -1,5 +1,5 @@
 --TEST--
-Test VERIFY_RETURN_TYPE overload
+Test VERIFY_RETURN_TYPE overload - PHP 70 compliant
 --DESCRIPTION--
 When using the explicit cast of objects, return type hinting can be broken.
 
@@ -23,10 +23,6 @@ class Test extends Thread {
         public function wrongReturnType():string {
             return 1;
         }
-        
-        public function checkOptionalNull():?Threaded {
-            return ($var = null);
-        }
 
 	public function method() : Custom {
 		return (object) $this->custom;
@@ -34,9 +30,8 @@ class Test extends Thread {
 
 	public function run() {
 		var_dump($this->method());
-                $this->checkReturnType();
-                $this->wrongReturnType();
-                $this->checkOptionalNull();
+                var_dump($this->checkReturnType());
+                var_dump($this->wrongReturnType());
 	}
 }
 
@@ -49,9 +44,3 @@ object(Custom)#1 (0) {
 }
 int(1)
 string(1) "1"
-NULL
-
-
-
-
-
