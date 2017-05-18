@@ -663,12 +663,12 @@ static pthreads_storage* pthreads_store_create(zval *unstore, zend_bool complex)
                                 storage->origin = threaded->origin;
 				break;
 			}
-/*
+
 			if (!complex) {
 				storage->type = IS_NULL;
 				break;
 			}
-*/
+
 		/* break intentionally omitted */
 		case IS_ARRAY: if (pthreads_store_tostring(unstore, (char**) &storage->data, &storage->length, complex)==SUCCESS) {
 			if (Z_TYPE_P(unstore) == IS_ARRAY)
