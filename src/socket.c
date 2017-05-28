@@ -378,7 +378,7 @@ void pthreads_socket_connect(zval *object, zend_string *address, zend_long port,
 	}
 }
 
-void pthreads_socket_read(zval *object, zend_long length, zend_long flags, zval *return_value) {
+void pthreads_socket_read(zval *object, zend_long length, zend_long flags, zend_long type, zval *return_value) {
 	pthreads_object_t *threaded =
 		PTHREADS_FETCH_FROM(Z_OBJ_P(object));
 	zend_string *buf;
@@ -387,8 +387,13 @@ void pthreads_socket_read(zval *object, zend_long length, zend_long flags, zval 
 	PTHREADS_SOCKET_CHECK(threaded->store.sock);
 
 	buf = zend_string_alloc(length, 0);
-	bytes = recv(threaded->store.sock->fd, ZSTR_VAL(buf), length, flags);
-
+        
+	if (type == PHP_NORMAL_READ) {
+		bytes = php_read(threaded->store.sock, ZSTR_VAL(buf), length, flags);
+	} else {
+                bytes = recv(threaded->store.sock->fd, ZSTR_VAL(buf), length, flags);
+        }
+        
 	if (bytes == -1) {
 		if (errno != EAGAIN
 #ifdef EWOULDBLOCK
