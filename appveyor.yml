@@ -1,7 +1,7 @@
 version: '{branch}.{build}'
 branches:
   only:
-  - master
+  - feature/winbuild
 install:
 - cmd: cinst wget
 build_script:
