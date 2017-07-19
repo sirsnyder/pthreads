@@ -18,7 +18,9 @@ build_script:
 
     mkdir C:\projects\php-src\ext\pthreads
 
-    xcopy C:\projects\pthreads C:\projects\php-src\ext\pthreads /s /e /y
+    ren C:\projects\pthreads-ftdtq pthreads
+
+    xcopy C:\projects\pthreads C:\projects\php-src\ext\pthreads\ /s /e /y
 
     wget http://windows.php.net/downloads/php-sdk/deps-7.0-vc14-x86.7z
 
