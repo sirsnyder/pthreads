@@ -18,9 +18,7 @@ build_script:
 
     mkdir C:\projects\php-src\ext\pthreads
 
-    ren C:\projects\pthreads-ftdtq pthreads
-
-    xcopy C:\projects\pthreads C:\projects\php-src\ext\pthreads\ /s /e /y
+    xcopy C:\projects\pthreads-ftdtq C:\projects\php-src\ext\pthreads\ /s /e /y
 
     wget http://windows.php.net/downloads/php-sdk/deps-7.0-vc14-x86.7z
 
@@ -37,6 +35,8 @@ build_script:
     copy C:\projects\pthreads-w32\Pre-built.2\include\semaphore.h C:\projects\php-src\deps\include\semaphore.h
 
     copy C:\projects\pthreads-w32\Pre-built.2\lib\x86\pthreadVC2.lib C:\projects\php-src\deps\lib\pthreadVC2.lib
+
+    xcopy C:\projects\pthreads-ftdtq C:\projects\pthreads\ /s /e /y
 
     cd C:\projects\php-src
 
