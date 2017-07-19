@@ -14,7 +14,7 @@ build_script:
 
     C:\projects\php-sdk\bin\phpsdk_setvars.bat
 
-    git clone https://github.com/php/php-src C:\projects\php-src
+    git clone -b PHP-7.1 https://github.com/php/php-src C:\projects\php-src
 
     mkdir C:\projects\php-src\ext\pthreads
 
@@ -22,7 +22,7 @@ build_script:
 
     wget http://windows.php.net/downloads/php-sdk/deps-7.0-vc14-x86.7z
 
-    7z x -y deps-7.0-vc14-x86.7z -oC:\projects\php-src
+    7z x -y deps-7.1-vc14-x86.7z -oC:\projects\php-src
 
     wget http://www.mirrorservice.org/sites/sources.redhat.com/pub/pthreads-win32/pthreads-w32-2-9-1-release.zip
 
