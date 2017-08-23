@@ -896,6 +896,7 @@ PHP_MINFO_FUNCTION(pthreads)
 {
 	php_info_print_table_start();
 	php_info_print_table_row(2, "Version", PHP_PTHREADS_VERSION);
+        php_info_print_table_row(1, "extended");
 	php_info_print_table_end();
 }
 
