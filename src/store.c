@@ -267,6 +267,9 @@ int pthreads_store_read(zval *object, zval *key, int type, zval *read) {
                             if(threadedStorage->monitor != threadedProperty->monitor) {
                                 property = NULL;
                             }
+                        } else {
+                            // expected storage has gone
+                            property = NULL;
                         }
                         pthreads_monitor_unlock(threaded->monitor);
                 }
