@@ -288,7 +288,7 @@ static inline zend_function* pthreads_copy_internal_function(zend_function *func
 static zend_function* pthreads_copy_function(zend_function *function) {
 	zend_function *copy = zend_hash_index_find_ptr(&PTHREADS_ZG(resolve), (zend_ulong)function);
 	
-	if (copy) {
+	if (copy && copy->op_array.run_time_cache == NULL) {
 		function_add_ref(copy);
 		return copy;
 	}
