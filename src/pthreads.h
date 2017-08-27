@@ -108,7 +108,6 @@ extern zend_class_entry *pthreads_socket_entry;
 #endif
 
 extern zend_object_handlers pthreads_handlers;
-extern zend_object_handlers pthreads_socket_handlers;
 extern zend_object_handlers *zend_handlers;
 
 extern struct _pthreads_globals pthreads_globals;

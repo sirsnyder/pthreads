@@ -176,8 +176,10 @@ zend_object* pthreads_socket_ctor(zend_class_entry *entry) {
 
 	threaded->scope = PTHREADS_SCOPE_SOCKET;
 	pthreads_base_ctor(threaded, entry);
-	threaded->std.handlers = &pthreads_socket_handlers;
+	threaded->std.handlers = &pthreads_handlers;
 
+	printf("pthreads_socket_ctor %p \n", threaded);
+	
 	return &threaded->std;
 } /* }}} */
 
@@ -239,20 +241,23 @@ void pthreads_current_thread(zval *return_value) {
 
 /* {{{ */
 int pthreads_connect(pthreads_object_t* source, pthreads_object_t* destination) {
+	
 	if (source && destination) {
                 pthreads_ident_t destCreator = destination->creator;
 		
                 if (PTHREADS_IS_NOT_CONNECTION(destination)) {
-			if (!PTHREADS_IS_SOCKET(destination)) {
-				pthreads_store_free(destination->store.props);
-				if (PTHREADS_IS_WORKER(destination)) {
-					pthreads_stack_free(destination->stack);
-				}
-				free(destination->running);
-			} else {
-				pthreads_socket_free(destination->store.sock, 1);
+	
+			pthreads_store_free(destination->store.props);
+	
+			if (PTHREADS_IS_WORKER(destination)) {
+				pthreads_stack_free(destination->stack);
 			}
 
+			free(destination->running);
+			
+			if (PTHREADS_IS_SOCKET(destination)) {
+				pthreads_socket_free(destination->store.sock, 1);
+			}
 			pthreads_monitor_free(destination->monitor);
 		}
 
@@ -302,6 +307,7 @@ static inline void pthreads_base_init(pthreads_object_t* base) {
 
 /* {{{ */
 static void pthreads_base_ctor(pthreads_object_t* base, zend_class_entry *entry) {
+    
 	zend_object_std_init(&base->std, entry);
 	object_properties_init(&base->std, entry);
 
@@ -313,18 +319,20 @@ static void pthreads_base_ctor(pthreads_object_t* base, zend_class_entry *entry)
 
 	if (PTHREADS_IS_NOT_CONNECTION(base)) {
 		base->monitor = pthreads_monitor_alloc();
-		if (!PTHREADS_IS_SOCKET(base)) {
-			base->store.props   = pthreads_store_alloc();
-			base->running = malloc(sizeof(pthreads_object_t**));
-
-			if (PTHREADS_IS_WORKER(base)) {
-				base->stack = pthreads_stack_alloc(base->monitor);
-			}
-			pthreads_base_init(base);
-		} else {
-			base->store.sock = pthreads_socket_alloc();
+		
+		base->store.props   = pthreads_store_alloc();
+		base->running = malloc(sizeof(pthreads_object_t**));
+	
+		if (PTHREADS_IS_WORKER(base)) {
+			base->stack = pthreads_stack_alloc(base->monitor);
 		}
+	
+		if (PTHREADS_IS_SOCKET(base)) {
+			base->store.sock = pthreads_socket_alloc();
+		}	
+		pthreads_base_init(base);
 	}
+	
 } /* }}} */
 
 /* {{{ */
@@ -332,25 +340,29 @@ void pthreads_base_free(zend_object *object) {
 	pthreads_object_t* base = PTHREADS_FETCH_FROM(object);
 
 	if (PTHREADS_IS_NOT_CONNECTION(base)) {
-		if (!PTHREADS_IS_SOCKET(base)) {
-			if ((PTHREADS_IS_THREAD(base)||PTHREADS_IS_WORKER(base)) &&
-				pthreads_monitor_check(base->monitor, PTHREADS_MONITOR_STARTED) &&
-				!pthreads_monitor_check(base->monitor, PTHREADS_MONITOR_JOINED)) {
-				pthreads_join(base);
-			}
 
-			if (pthreads_monitor_lock(base->monitor)) {
-				pthreads_store_free(base->store.props);
-				if (PTHREADS_IS_WORKER(base)) {
-					pthreads_stack_free(base->stack);	
-				}
-				pthreads_monitor_unlock(base->monitor);
-			}
+		if ((PTHREADS_IS_THREAD(base)||PTHREADS_IS_WORKER(base)) &&
+			pthreads_monitor_check(base->monitor, PTHREADS_MONITOR_STARTED) &&
+			!pthreads_monitor_check(base->monitor, PTHREADS_MONITOR_JOINED)) {
+			pthreads_join(base);
+		}
 
-			if (base->running) {
-				free(base->running);
+		if (pthreads_monitor_lock(base->monitor)) {
+			pthreads_store_free(base->store.props);
+			if (PTHREADS_IS_WORKER(base)) {
+				pthreads_stack_free(base->stack);	
 			}
-		} else {
+			pthreads_monitor_unlock(base->monitor);
+		}
+
+		if (base->running) {
+			free(base->running);
+		}
+
+		if (PTHREADS_IS_SOCKET(base)) {
+		    
+	
+	printf("pthreads_base_free %p \n", base);
 			pthreads_socket_free(base->store.sock, 1);
 		}
 

@@ -43,7 +43,7 @@ typedef struct _pthreads_object_t {
 	zend_ulong source;
 	zend_ulong options;
 	pthreads_monitor_t	*monitor;
-	union {
+	struct {
 		pthreads_store_t	*props;
 		pthreads_socket_t	*sock;
 	} store;

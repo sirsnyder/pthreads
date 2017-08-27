@@ -96,7 +96,6 @@ zend_class_entry *pthreads_pool_entry;
 zend_class_entry *pthreads_socket_entry;
 
 zend_object_handlers pthreads_handlers;
-zend_object_handlers pthreads_socket_handlers;
 zend_object_handlers *zend_handlers;
 void ***pthreads_instance = NULL;
 
@@ -799,21 +798,6 @@ PHP_MINIT_FUNCTION(pthreads)
 
 	pthreads_handlers.clone_obj = pthreads_base_clone;
 	pthreads_handlers.compare_objects = pthreads_compare_objects;
-
-	memcpy(&pthreads_socket_handlers, &pthreads_handlers, sizeof(zend_object_handlers));
-
-	pthreads_socket_handlers.count_elements = pthreads_count_properties_disallow;
-
-	pthreads_socket_handlers.cast_object = zend_handlers->cast_object;
-	pthreads_socket_handlers.get_properties = pthreads_read_properties_disallow;
-	pthreads_socket_handlers.read_property = pthreads_read_property_disallow;
-	pthreads_socket_handlers.write_property = pthreads_write_property_disallow;
-	pthreads_socket_handlers.has_property = pthreads_has_property_disallow;
-	pthreads_socket_handlers.unset_property = pthreads_unset_property_disallow;
-	pthreads_socket_handlers.read_dimension = pthreads_read_dimension_disallow;
-	pthreads_socket_handlers.write_dimension = pthreads_write_dimension_disallow;
-	pthreads_socket_handlers.has_dimension = pthreads_has_dimension_disallow;
-	pthreads_socket_handlers.unset_dimension = pthreads_unset_dimension_disallow;
 
 	ZEND_INIT_MODULE_GLOBALS(pthreads, pthreads_globals_ctor, NULL);	
 

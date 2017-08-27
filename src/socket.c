@@ -311,7 +311,7 @@ void pthreads_socket_accept(zval *object, zend_class_entry *ce, zval *return_val
 		return;
 	}
 	object_init_ex(return_value, ce);
-
+	
 	accepted = PTHREADS_FETCH_FROM(Z_OBJ_P(return_value));
 	accepted->store.sock->fd = acceptedFd;
 	accepted->store.sock->blocking = 1;
