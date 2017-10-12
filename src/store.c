@@ -821,7 +821,7 @@ static int pthreads_store_tostring(zval *pzval, char **pstring, size_t *slength,
 
 		memset(&smart, 0, sizeof(smart_str));
 
-		if (Z_TYPE_P(pzval) == IS_ARRAY && !complex) {
+		if (!PTHREADS_ZG(threadlocal_static_properties) && Z_TYPE_P(pzval) == IS_ARRAY && !complex) {
 			tmp = zend_array_dup(Z_ARRVAL_P(pzval));
 
 			ZVAL_ARR(&ztmp, tmp);
