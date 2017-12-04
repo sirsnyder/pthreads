@@ -55,6 +55,10 @@ ZEND_BEGIN_ARG_INFO_EX(pthreads_no_sleeping_arginfo, 0, 0, 1)
 	ZEND_ARG_INFO(0, timeout)
 ZEND_END_ARG_INFO()
 
+PHP_INI_BEGIN()
+    STD_PHP_INI_ENTRY("pthreads.threadlocal_static_properties", "0", PHP_INI_ALL, OnUpdateBool, threadlocal_static_properties, zend_pthreads_globals, pthreads_globals)
+PHP_INI_END()
+
 PHP_FUNCTION(pthreads_no_sleeping) {
 	zend_throw_exception_ex(spl_ce_RuntimeException, 0,
 		"%s is not suitable for use in multi threaded applications, use synchronized Threaded::wait",
@@ -287,6 +291,7 @@ PHP_MINIT_FUNCTION(pthreads)
 	REGISTER_LONG_CONSTANT("PTHREADS_INHERIT_INCLUDES", PTHREADS_INHERIT_INCLUDES, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("PTHREADS_INHERIT_COMMENTS", PTHREADS_INHERIT_COMMENTS, CONST_CS | CONST_PERSISTENT);
 
+	REGISTER_LONG_CONSTANT("PTHREADS_LOCAL_STATICS", PTHREADS_LOCAL_STATICS, CONST_CS | CONST_PERSISTENT);
 	REGISTER_LONG_CONSTANT("PTHREADS_ALLOW_HEADERS", PTHREADS_ALLOW_HEADERS, CONST_CS | CONST_PERSISTENT);
 
 	INIT_CLASS_ENTRY(ce, "Collectable", pthreads_collectable_methods);
