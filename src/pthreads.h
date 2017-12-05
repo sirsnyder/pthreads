@@ -121,6 +121,7 @@ ZEND_BEGIN_MODULE_GLOBALS(pthreads)
 	int   signal;
 	zval  this;
 	HashTable resolve;
+	HashTable filenames;
 	HashTable *resources;
 	zend_bool threadlocal_static_properties;
 ZEND_END_MODULE_GLOBALS(pthreads)
