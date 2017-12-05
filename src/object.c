@@ -258,6 +258,8 @@ int pthreads_connect(pthreads_object_t* source, pthreads_object_t* destination) 
 
 		memcpy(destination, source, sizeof(pthreads_object_t) - sizeof(zend_object));
 		
+		destination->origin = source->origin ? source->origin : (zend_ulong)source;
+		destination->source = (zend_ulong)source;
 		destination->creator = destCreator;
 		destination->scope |= PTHREADS_SCOPE_CONNECTION;
 
@@ -306,6 +308,8 @@ static void pthreads_base_ctor(pthreads_object_t* base, zend_class_entry *entry)
 	base->creator.ls = TSRMLS_CACHE;
 	base->creator.id = pthreads_self();
 	base->options = PTHREADS_INHERIT_ALL;
+	base->source = 0;
+	base->origin = 0;
 
 	if (PTHREADS_IS_NOT_CONNECTION(base)) {
 		base->monitor = pthreads_monitor_alloc();

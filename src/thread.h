@@ -39,6 +39,8 @@ typedef struct _pthreads_ident_t {
 typedef struct _pthreads_object_t {
 	pthread_t thread;
 	uint scope;
+	zend_ulong origin;
+	zend_ulong source;
 	zend_ulong options;
 	pthreads_monitor_t	*monitor;
 	union {
